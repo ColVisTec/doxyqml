@@ -5,7 +5,7 @@ using namespace QtQuick;
 /**
  * A very simple item
  */
-class FunctionArgs : public Item {
+class FunctionArgs : public QtQuick.Item {
 public:
 /**
      * The 'foo' property

@@ -1,7 +1,7 @@
 /**
  * An item with readonly properties
  */
-class ReadOnlyProperty : public Item {
+class ReadOnlyProperty : public QtQuick.Item {
 public:
 /**
      * A readonly property

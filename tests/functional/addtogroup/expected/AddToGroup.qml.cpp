@@ -1,7 +1,7 @@
 /** \addtogroup qml_group
  * @{
  */
-class AddToGroup : public Item {
+class AddToGroup : public QtQuick.Item {
 public:
 };
 /** @} */

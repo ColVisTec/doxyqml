@@ -1,6 +1,6 @@
 namespace test::doxyqml {
 /** @since 2.0 */
-class QualifiedName : public Item {
+class QualifiedName : public QtQuick.Item {
 public:
 
 Q_PROPERTY(int x)

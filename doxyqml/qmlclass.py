@@ -1,7 +1,13 @@
 import logging
 import re
+import typing
 
 TYPE_RX = r"(?P<prefix>\s+type:)(?P<type>[\w.<>|]+)"
+
+BASE_NAME_DICT = {
+    "QtObject": "QtQml.QtObject",
+    "Item": "QtQuick.Item",
+}
 
 
 def post_process_type(rx, text, type):
@@ -12,7 +18,7 @@ def post_process_type(rx, text, type):
     return text, type
 
 
-class QmlBaseComponent(object):
+class QmlBaseComponent():
     def __init__(self, name):
         self.name = name
         self.base_name = ""
@@ -53,6 +59,10 @@ class QmlBaseComponent(object):
     def _start_class(self, lst):
         class_decl = "class " + self.class_name
         if self.base_name:
+            for alias, replacement in self.alias.items():
+                self.base_name = re.sub(alias, replacement, self.base_name)
+            self.base_name = BASE_NAME_DICT.get(self.base_name, self.base_name)
+
             class_decl += " : public " + self.base_name
 
         class_decl += " {"
@@ -72,6 +82,7 @@ class QmlClass(QmlBaseComponent):
         self.header_comments = []
         self.footer_comments = []
         self.imports = []
+        self.alias = {}
         if version:
             self.header_comments.append(QmlClass.VERSION_COMMENT % version)
 
@@ -82,10 +93,13 @@ class QmlClass(QmlBaseComponent):
             self.header_comments.append(QmlClass.SINGLETON_COMMENT)
 
     def add_import(self, decl):
-        module = decl.split()[1]
+        modules = decl.split()
+        module = modules[1]
         if module[0] == '"':
             # Ignore directory or javascript imports for now
             return
+        if len(modules) > 3:
+            self.alias[modules[4]] = modules[1]
         self.imports.append(module)
 
     def add_header_comment(self, obj):

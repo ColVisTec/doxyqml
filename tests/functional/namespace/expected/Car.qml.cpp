@@ -2,7 +2,7 @@ namespace ns {
 /**
  * A car
  */
-class Car : public Item {
+class Car : public QtQuick.Item {
 public:
 /**
      * Car speed

@@ -1,5 +1,5 @@
 using namespace QtQuick;
-class Endcond : public Item {
+class Endcond : public QtQuick.Item {
 public:
 /**
      * The 'foo' property

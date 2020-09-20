@@ -1,4 +1,4 @@
-class Signal : public Item {
+class Signal : public QtQuick.Item {
 public:
 
 void move(x, y);

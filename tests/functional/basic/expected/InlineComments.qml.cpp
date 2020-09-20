@@ -6,7 +6,7 @@ using namespace QtQuick;
 /**
  * A very simple item   ///< How about here?
  */
-class InlineComments : public Item {
+class InlineComments : public QtQuick.Item {
 public:
 Q_PROPERTY(int foo) ///< The 'foo' property
 Q_SIGNALS: void clicked(int x, int y); /**< The `clicked` signal */
