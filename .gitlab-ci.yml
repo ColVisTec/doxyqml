@@ -1,0 +1,16 @@
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - apt-get update -qq
+    - apt-get install -qq doxygen python3-pip
+    - python3 -m pip install coverage pytest pytest-cov
+    - python3 -m pip install --upgrade -e .
+    - tests/run-coverage
+    - tests/functional/tests.py
+    - python3 -m coverage xml
+  artifacts:
+    reports:
+      cobertura: coverage.xml
