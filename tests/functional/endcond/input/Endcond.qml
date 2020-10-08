@@ -12,4 +12,8 @@ Item {
     property int test
 
     /// @endcond TEST
+
+    /// @cond
+    visible: false
+    /// @endcond
 }

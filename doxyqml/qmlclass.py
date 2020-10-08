@@ -133,12 +133,19 @@ class QmlClass(QmlBaseComponent):
 
         # Sort elements before exporting to reduce the number of times element list must
         # be iterated through.
+        last_element_was_public = True
         for element in self.elements:
-            if str(element) == "" or isinstance(element, str) or element.is_public_element():
-                # Register empty strings as public to prevent exporting unneeded "private" keyword.
+            if str(element) == "" or isinstance(element, str) :
+                if last_element_was_public:
+                    public_members.append(element)
+                else:
+                    private_members.append(element)
+            elif element.is_public_element():
                 public_members.append(element)
+                last_element_was_public = True
             else:
                 private_members.append(element)
+                last_element_was_public = False
 
         self._export_elements(public_members, lst)
 

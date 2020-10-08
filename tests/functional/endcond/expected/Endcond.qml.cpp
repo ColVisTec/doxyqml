@@ -9,4 +9,8 @@ Q_PROPERTY(int foo)
 /// A test property, not visible by default
 Q_PROPERTY(int test)
 /// @endcond TEST
+private:
+/// @cond
+var visible;
+/// @endcond
 };
