@@ -5,5 +5,5 @@ using namespace QtQuick::Controls;
 class AbstractApplicationWindow : public QtQuick.Controls.ApplicationWindow {
 public:
 
-Q_PROPERTY(Item pageStack)
+Q_PROPERTY(Item pageStack READ dummyGetter_pageStack_ignore)
 };

@@ -7,6 +7,6 @@ public:
 /**
      * Car speed
      */
-Q_PROPERTY(real speed)
+Q_PROPERTY(real speed READ dummyGetter_speed_ignore)
 };
 }

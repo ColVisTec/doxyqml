@@ -10,7 +10,7 @@ public:
 /**
      * The 'foo' property
      */
-Q_PROPERTY(int foo)
+Q_PROPERTY(int foo READ dummyGetter_foo_ignore)
 
 Q_SIGNALS: void clicked(int x, int y); public:
 
@@ -29,9 +29,9 @@ void doSomething(string arg1, int arg2);
      */
 void badlyDocumented(string foo, bar);
 
-Q_PROPERTY(string escaped)
+Q_PROPERTY(string escaped READ dummyGetter_escaped_ignore)
 
-Q_PROPERTY(string block)
+Q_PROPERTY(string block READ dummyGetter_block_ignore)
 /**
      * Compute the arg^2
      * @return the result
@@ -58,7 +58,7 @@ int propDefaultParameter(int arg = foo);
 /// One-line comment
 void refresh();
 
-Q_PROPERTY(int weirdProperty)
+Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)
 /* baz */
 /* foo */
 };

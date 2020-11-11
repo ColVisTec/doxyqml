@@ -83,4 +83,4 @@ class QmlPropertyTestCase(TestCase):
         prop.is_default = True
 
         self.assertEqual(str(prop),
-                         "/// Children\n" + QmlProperty.DEFAULT_PROPERTY_COMMENT + "\nQ_PROPERTY(list<Item> )")
+                         "/// Children\n" + QmlProperty.DEFAULT_PROPERTY_COMMENT + "\nQ_PROPERTY(list<Item>  READ dummyGetter__ignore)")

@@ -257,7 +257,8 @@ class QmlProperty(object):
             lst.append(self.DEFAULT_PROPERTY_COMMENT + "\n")
         elif self.is_readonly:
             lst.append(self.READONLY_PROPERTY_COMMENT + "\n")
-        lst.append("Q_PROPERTY(%s %s)" % (self.type, self.name))
+        lst.append("Q_PROPERTY(%s %s READ dummyGetter_%s_ignore)"
+            % (self.type, self.name, self.name))
         if self.doc_is_inline:
             lst.append(" " + self.doc)
         return "".join(lst)
