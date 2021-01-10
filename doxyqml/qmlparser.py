@@ -1,6 +1,6 @@
 import doxyqml.lexer as lexer
 
-from doxyqml.qmlclass import QmlComponent, QmlArgument, QmlProperty, QmlFunction, QmlSignal, QmlAttribute
+from doxyqml.qmlclass import QmlComponent, QmlArgument, QmlEnum, QmlEnumerator, QmlProperty, QmlFunction, QmlSignal, QmlAttribute
 
 
 class QmlParserError(Exception):
@@ -50,6 +50,8 @@ def parse_class_content(reader, cls, token, doc_token):
         obj = parse_function(reader)
     elif keyword == "signal":
         obj = parse_signal(reader)
+    elif keyword == "enum":
+        obj = parse_enum(reader)
     else:
         raise QmlParserError("Unknown keyword '%s'" % keyword, token)
     if doc_token is not None:
@@ -107,6 +109,80 @@ def parse_function(reader):
     reader.consume_expecting(lexer.CHAR, "(")
     obj.args = parse_arguments(reader)
     return obj
+
+
+def parse_enum(reader):
+    obj = QmlEnum()
+    token = reader.consume_expecting(lexer.ELEMENT)
+    obj.name = token.value
+
+    reader.consume_expecting(lexer.BLOCK_START)
+    prev_comment_token = None
+    prev_enumerator = None
+
+    while not reader.at_end():
+        token = reader.consume()
+        if is_comment_token(token):
+            if token.type == lexer.ICOMMENT:
+                if prev_enumerator == None:
+                    # this is still for the enum itself
+                    obj.doc = token.value
+                    obj.doc_is_inline = True
+                else:
+                    # for last enum
+                    prev_enumerator.doc = token.value
+                    prev_enumerator.doc_is_inline = True
+            else:
+                prev_comment_token = token
+        elif token.type == lexer.BLOCK_END:
+            break
+        elif token.type == lexer.ELEMENT:
+            if prev_enumerator:
+                obj.enumerators.append(prev_enumerator)
+            prev_enumerator, block_end = parse_enumerator(reader, token.value)
+            if prev_comment_token:
+                 prev_enumerator.doc = prev_comment_token.value
+            prev_comment_token = None
+            if block_end:
+                break
+            continue
+        elif token.type == lexer.CHAR and token.value == ",":
+            continue
+        else:
+            raise QmlParserUnexpectedTokenError(token)
+
+    if prev_enumerator:
+        prev_enumerator.is_last = True
+        obj.enumerators.append(prev_enumerator)
+    return obj
+
+
+def parse_enumerator(reader, name):
+    obj = QmlEnumerator(name)
+
+    block_end = False
+
+    while not reader.at_end():
+        token = reader.consume()
+        if is_comment_token(token):
+            if token.type == lexer.ICOMMENT:
+                # we could catch the inline comment for the last item here
+                obj.doc = token.value
+                obj.doc_is_inline = True
+        elif token.type == lexer.BLOCK_END:
+            block_end = True
+            break
+        elif token.type == lexer.CHAR:
+            if token.value == ",":
+                break
+            elif token.value == "=":
+                token = reader.consume_expecting(lexer.ELEMENT)
+                obj.initializer = token.value
+                continue
+        else:
+            raise QmlParserUnexpectedTokenError(token)
+
+    return obj, block_end
 
 
 def parse_signal(reader):

@@ -313,6 +313,58 @@ class QmlFunction(object):
         return True
 
 
+class QmlEnum(object):
+    def __init__(self):
+        self.name = ""
+        self.doc = ""
+        self.doc_is_inline = False
+        self.enumerators = []
+
+    def __str__(self):
+        lst = []
+
+        if self.doc and not self.doc_is_inline:
+            lst.append(self.doc + "\n")
+        lst.append("enum class %s {" % (self.name))
+        if self.doc and self.doc_is_inline:
+            lst.append(" " + self.doc)
+        lst.append("\n")
+
+        for e in self.enumerators:
+            lst.append(str(e) + "\n")
+
+        lst.append("};")
+        return "".join(lst)
+
+    def is_public_element(self):
+        return True
+
+
+class QmlEnumerator(object):
+    def __init__(self, name):
+        self.name = name
+        self.initializer = ""
+        self.is_last = False
+        self.doc = ""
+        self.doc_is_inline = False
+
+    def __str__(self):
+        lst = []
+        if self.doc and not self.doc_is_inline:
+            lst.append(self.doc + "\n")
+        lst.append("%s" % (self.name))
+        if self.initializer:
+            lst.append(" = %s" % (self.initializer))
+        if not self.is_last:
+            lst.append(",")
+        if self.doc and self.doc_is_inline:
+            lst.append(" " + self.doc)
+        return "".join(lst)
+
+    def is_public_element(self):
+        return True
+
+
 class QmlSignal(object):
     def __init__(self):
         self.name = ""
