@@ -29,7 +29,7 @@ class LexerError(Exception):
         self.idx = idx
 
 
-Token = namedtuple("Token", ["type", "value", "idx"])
+Token = namedtuple("Token", ["type", "value", "idx", "column"])
 
 
 class Tokenizer(object):
@@ -51,9 +51,9 @@ class Lexer(object):
 
         self.tokenizers = [
             Tokenizer(ICOMMENT, re.compile(r"/\*[!*]<.*?\*/", re.DOTALL)),
-            Tokenizer(ICOMMENT, re.compile(r"//[/!]<.*")),
+            Tokenizer(ICOMMENT, re.compile(r"//[/!]<[^\n]*(?:\n[ \t]*//[/!]<[^\n]*)*")),
             Tokenizer(COMMENT, re.compile(r"/\*.*?\*/", re.DOTALL)),
-            Tokenizer(COMMENT, re.compile(r"//.*")),
+            Tokenizer(COMMENT, re.compile(r"//[^\n]*(?:\n[ \t]*//[^\n]*)*")),
             # A double quote, then either:
             # - anything but a double quote or a backslash
             # - an escaped char (\n, \t...)
@@ -70,6 +70,7 @@ class Lexer(object):
             ]
         self.text = text.replace('\\\n', '\n')
         self.idx = 0
+        self.column = 0
         self.newline = False
         self.tokens = []
 
@@ -91,8 +92,10 @@ class Lexer(object):
             if self.text[self.idx] == '\n':
                 self.newline = True
                 self.idx += 1
+                self.column = 0
             elif self.text[self.idx].isspace():
                 self.idx += 1
+                self.column += 1
             else:
                 break
 
@@ -106,11 +109,11 @@ class Lexer(object):
 
                 if len(match.groups()) > 0:
                     tokenizer(self, match.group(1))
-                    self.idx = match.end(1)
+                    self.set_position(match.end(1))
                     return
                 else:
                     tokenizer(self, match.group(0))
-                    self.idx = match.end(0)
+                    self.set_position(match.end(0))
                     return
 
         for tokenizer in self.tokenizers:
@@ -121,11 +124,11 @@ class Lexer(object):
 
             if len(match.groups()) > 0:
                 tokenizer(self, match.group(1))
-                self.idx = match.end(1)
+                self.set_position(match.end(1))
                 return
             else:
                 tokenizer(self, match.group(0))
-                self.idx = match.end(0)
+                self.set_position(match.end(0))
                 return
 
         raise LexerError("No lexer matched", self.idx)
@@ -137,9 +140,25 @@ class Lexer(object):
             if (token.type == KEYWORD and token.value == "property" and idx > 1 and
                     self.tokens[idx - 1].type == ELEMENT and
                     self.tokens[idx - 2].type == KEYWORD and self.tokens[idx - 2].value.endswith("property")):
-                self.tokens[idx] = Token(ELEMENT, token.value, token.idx)
+                self.tokens[idx] = Token(ELEMENT, token.value, token.idx, token.column)
+            if token.type == COMMENT or token.type == ICOMMENT:
+                if token.value.startswith("//"):
+                    self.left_shift_comment(idx)
             if token.type == ICOMMENT and idx > 1:
                 self.move_inline_comments(idx)
+
+    def left_shift_comment(self, idx):
+        """
+        Change the value of multiline-tokens so they look like they were
+        defined on column 1 instead of wherever they were.
+        """
+        token = self.tokens.pop(idx)
+        if token.column < 1:
+            self.tokens.insert(idx, token)
+            return
+        rx = re.compile(r"^[ \t]{{{}}}".format(token.column), re.MULTILINE)
+        newval = rx.sub("", token.value)
+        self.tokens.insert(idx, Token(token.type, newval, token.idx, token.column))
 
     def move_inline_comments(self, start_idx):
         """
@@ -167,4 +186,12 @@ class Lexer(object):
         self.tokens.insert(ins_idx, self.tokens.pop(start_idx))
 
     def append_token(self, type, value):
-        self.tokens.append(Token(type, value, self.idx))
+        self.tokens.append(Token(type, value, self.idx, self.column))
+
+    def set_position(self, idx):
+        self.idx = idx
+        newline = self.text.rfind("\n", 0, idx)
+        if newline == -1:
+            self.column = idx
+        else:
+            self.column = idx - newline - 1
