@@ -7,8 +7,6 @@ using namespace QtQuick::Controls;
  * Parent item.
  */
 class Nesting : public QtQuick.Item {
-public:
-private:
 /**
      * A child with an ID.
      */

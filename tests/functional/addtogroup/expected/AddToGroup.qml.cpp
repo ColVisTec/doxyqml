@@ -2,6 +2,5 @@
  * @{
  */
 class AddToGroup : public QtQuick.Item {
-public:
 };
 /** @} */

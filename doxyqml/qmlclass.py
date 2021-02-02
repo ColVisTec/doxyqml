@@ -48,13 +48,25 @@ class QmlBaseComponent():
         self._export_content(lst)
         return "\n".join(lst)
 
+    def _export_element(self, element, lst):
+        doc = str(element)
+        if doc:
+            lst.append(doc)
+
     def _export_elements(self, input_list, lst, filter=None):
         for element in input_list:
             if filter and not filter(element):
                 continue
-            doc = str(element)
-            if doc:
-                lst.append(doc)
+            self._export_element(element, lst)
+
+    def _export_element_w_access(self, element, lst, is_public,
+            last_was_public):
+        if is_public != last_was_public:
+            if is_public:
+                lst.append("public:")
+            else:
+                lst.append("private:")
+        self._export_element(element, lst)
 
     def _start_class(self, lst):
         class_decl = "class " + self.class_name
@@ -67,7 +79,6 @@ class QmlBaseComponent():
 
         class_decl += " {"
         lst.append(class_decl)
-        lst.append("public:")
 
     def _end_class(self, lst):
         lst.append("};")
@@ -128,30 +139,19 @@ class QmlClass(QmlBaseComponent):
         # Public members.
         self._start_class(lst)
 
-        public_members = []
-        private_members = []
-
-        # Sort elements before exporting to reduce the number of times element list must
-        # be iterated through.
-        last_element_was_public = True
+        last_element_was_public = False
         for element in self.elements:
             if str(element) == "" or isinstance(element, str) :
-                if last_element_was_public:
-                    public_members.append(element)
-                else:
-                    private_members.append(element)
+                self._export_element_w_access(element, lst,
+                        last_element_was_public, last_element_was_public)
             elif element.is_public_element():
-                public_members.append(element)
+                self._export_element_w_access(element, lst, True,
+                        last_element_was_public)
                 last_element_was_public = True
             else:
-                private_members.append(element)
+                self._export_element_w_access(element, lst, False,
+                        last_element_was_public)
                 last_element_was_public = False
-
-        self._export_elements(public_members, lst)
-
-        if len(private_members) > 0:
-            lst.append("private:")
-            self._export_elements(private_members, lst)
 
         self._end_class(lst)
         self._export_footer(lst)
