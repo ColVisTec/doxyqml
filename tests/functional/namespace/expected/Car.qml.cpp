@@ -5,8 +5,8 @@ namespace ns {
 class Car : public QtQuick.Item {
 public:
 /**
-     * Car speed
-     */
+ * Car speed
+ */
 Q_PROPERTY(real speed READ dummyGetter_speed_ignore)
 };
 }

@@ -16,8 +16,8 @@ private:
 /// @brief Assignment to parent class property
 var visible;
 /** @name Their group
-     * @{
-     */
+ * @{
+ */
 public:
 /** @brief Property theirFoo, part of their group */
 Q_PROPERTY(int theirFoo READ dummyGetter_theirFoo_ignore)

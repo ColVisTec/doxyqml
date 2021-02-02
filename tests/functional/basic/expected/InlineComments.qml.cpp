@@ -15,10 +15,10 @@ Q_SIGNALS: void activated(); //!< Another signal
 public:
 void doSomething(string arg1, int arg2); /*!< @param arg1 first argument @param arg2 second argument */
 /**
-     * A weirdly documented function.... the inline comment will be stripped. Doxygen would ignore the inline comment anyway.
-     * @param foo first argument
-     * @param bar this argument does exist
-     */
+ * A weirdly documented function.... the inline comment will be stripped. Doxygen would ignore the inline comment anyway.
+ * @param foo first argument
+ * @param bar this argument does exist
+ */
 void weirdlyDocumented(string foo, int bar);
 Q_PROPERTY(string escaped READ dummyGetter_escaped_ignore) ///< and an inline comment
 Q_PROPERTY(string block READ dummyGetter_block_ignore) /**< and an inline comment! ***<  //!<  */
@@ -27,12 +27,12 @@ void refresh(); ///< Inline comment out of place (should be moved inline in the 
 // Just some regular comment
 void reload(); ///< Inline comment for a keyword following a regular comment.
 /*!  Just for fun...
-      ///< Inline comment
-      //!< Inline comment
-      @param arg1 first argument
-      @param arg2 second argument
-      /*!< Inline comment
-    */
+  ///< Inline comment
+  //!< Inline comment
+  @param arg1 first argument
+  @param arg2 second argument
+  /*!< Inline comment
+*/
 void update(string arg1, int arg2);
 
 Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)

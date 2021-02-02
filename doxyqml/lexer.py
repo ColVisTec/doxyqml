@@ -142,8 +142,7 @@ class Lexer(object):
                     self.tokens[idx - 2].type == KEYWORD and self.tokens[idx - 2].value.endswith("property")):
                 self.tokens[idx] = Token(ELEMENT, token.value, token.idx, token.column)
             if token.type == COMMENT or token.type == ICOMMENT:
-                if token.value.startswith("//"):
-                    self.left_shift_comment(idx)
+                self.left_shift_comment(idx)
             if token.type == ICOMMENT and idx > 1:
                 self.move_inline_comments(idx)
 

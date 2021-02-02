@@ -2,8 +2,8 @@ using namespace QtQuick;
 class Endcond : public QtQuick.Item {
 public:
 /**
-     * The 'foo' property
-     */
+ * The 'foo' property
+ */
 Q_PROPERTY(int foo READ dummyGetter_foo_ignore)
 /// @cond TEST
 
