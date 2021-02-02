@@ -17,6 +17,11 @@ def post_process_type(rx, text, type):
         text = text[:match.start("prefix")] + text[match.end("type"):]
     return text, type
 
+def is_cxx_comment(text):
+    if not isinstance(text, str):
+        text = str(text)
+    return text.startswith("//")
+
 
 class QmlBaseComponent():
     def __init__(self, name):
@@ -43,6 +48,13 @@ class QmlBaseComponent():
     def add_element(self, element):
         self.elements.append(element)
 
+    def starts_with_cxx_comment(self):
+        if not hasattr(self, "doc_is_inline") or not hasattr(self, "doc"):
+            return False
+        if self.doc_is_inline:
+            return False
+        return self.doc.startswith("//")
+
     def __str__(self):
         lst = []
         self._export_content(lst)
@@ -60,12 +72,14 @@ class QmlBaseComponent():
             self._export_element(element, lst)
 
     def _export_element_w_access(self, element, lst, is_public,
-            last_was_public):
+            last_was_public, last_was_cxx_comment):
         if is_public != last_was_public:
             if is_public:
                 lst.append("public:")
             else:
                 lst.append("private:")
+        elif last_was_cxx_comment and is_cxx_comment(element):
+            lst.append("")
         self._export_element(element, lst)
 
     def _start_class(self, lst):
@@ -140,18 +154,23 @@ class QmlClass(QmlBaseComponent):
         self._start_class(lst)
 
         last_element_was_public = False
+        last_element_was_cxx_comment = False
         for element in self.elements:
-            if str(element) == "" or isinstance(element, str) :
+            if str(element) == "" or isinstance(element, str):
                 self._export_element_w_access(element, lst,
-                        last_element_was_public, last_element_was_public)
+                        last_element_was_public, last_element_was_public,
+                        last_element_was_cxx_comment)
+                last_element_was_cxx_comment = is_cxx_comment(element)
             elif element.is_public_element():
                 self._export_element_w_access(element, lst, True,
-                        last_element_was_public)
+                        last_element_was_public, last_element_was_cxx_comment)
                 last_element_was_public = True
+                last_element_was_cxx_comment = False
             else:
                 self._export_element_w_access(element, lst, False,
-                        last_element_was_public)
+                        last_element_was_public, last_element_was_cxx_comment)
                 last_element_was_public = False
+                last_element_was_cxx_comment = False
 
         self._end_class(lst)
         self._export_footer(lst)
