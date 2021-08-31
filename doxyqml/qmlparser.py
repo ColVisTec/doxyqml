@@ -219,8 +219,12 @@ def parse_arguments(reader, typed=False):
         token = reader.consume_expecting(lexer.CHAR)
 
         if token.value == "=":
-            token = reader.consume_expecting([lexer.ELEMENT, lexer.STRING])
-            arg.default_value = token.value
+            token = reader.consume_expecting([lexer.ELEMENT, lexer.STRING, lexer.BLOCK_START])
+            if token.value == "{":
+                token = reader.consume_expecting(lexer.BLOCK_END)
+                arg.default_value = "{}"
+            else:
+                arg.default_value = token.value
             token = reader.consume_expecting(lexer.CHAR)
 
         args.append(arg)

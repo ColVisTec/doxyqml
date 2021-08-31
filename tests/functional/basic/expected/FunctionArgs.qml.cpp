@@ -57,6 +57,8 @@ string stringDefaultParameter(string arg = "hello");
 int propDefaultParameter(int arg = foo);
 /// One-line comment
 void refresh();
+/// Function that takes an empty object as default value for a parameter
+void objectDefaultParam(arg = {});
 
 Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)
 /* baz */

@@ -76,8 +76,15 @@ Item {
     function refresh() {
     }
 
+    /// Function that takes an empty object as default value for a parameter
+    function objectDefaultParam(arg = {}) {
+        return arg
+    }
+
     Item {
     }
+
+    Item {}
 
     property /* foo */ int /* bar */ weirdProperty /* baz */ : /* foo */ 12
 }
