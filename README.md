@@ -51,14 +51,16 @@ enough.
 Functions in QML are untyped, but you can define types in the documentation
 like this:
 
-    /**
-     * Create a user
-     * @param type:string firstname User firstname
-     * @param type:string lastname User lastname
-     * @param type:int User age
-     * @return type:User The User object
-     */
-    function createUser(firstname, lastname, age);
+```qml
+/**
+ * Create a user
+ * @param type:string firstname User firstname
+ * @param type:string lastname User lastname
+ * @param type:int User age
+ * @return type:User The User object
+ */
+function createUser(firstname, lastname, age);
+```
 
 ## Properties
 
@@ -66,8 +68,10 @@ QML properties are typed, so Doxyqml uses them by default. You can nevertheless
 overwrite the type using the same `type:<name>` syntax. This is useful to
 document property aliases:
 
-    /** type:string The user lastname */
-    property alias lastname: someObject.text
+```qml
+/** type:string The user lastname */
+property alias lastname: someObject.text
+```
 
 ## Signals
 
@@ -76,11 +80,13 @@ document their parameters. Using `type:<name>` syntax in signal documentation
 will not work: Doxyqml won't strip it out and Doxygen will confuse it with the
 parameter name.
 
-    /**
-     * User just logged in
-     * @param user The user which logged in
-     */
-    signal loggedIn(User user)
+```qml
+/**
+ * User just logged in
+ * @param user The user which logged in
+ */
+signal loggedIn(User user)
+```
 
 ## Extracting internal elements
 
