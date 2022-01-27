@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import codecs
 import logging
 import os
 import re
@@ -124,7 +125,7 @@ def main(argv=None, out=None):
     if argv is None:
         argv = sys.argv[1:]
     if out is None:
-        out == sys.stdout
+        out = sys.stdout
 
     args = parse_args(argv)
 
@@ -165,6 +166,7 @@ def main(argv=None, out=None):
         else:
             return -1
 
+    out = codecs.getwriter("utf-8")(out.buffer)
     print(qml_class, file=out)
 
     return 0

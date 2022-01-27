@@ -77,7 +77,7 @@ class Test(object):
             if not os.path.isdir(out_dir):
                 os.makedirs(out_dir)
 
-            with open(out_path, "w") as out:
+            with open(out_path, "w", encoding="iso-8859-1") as out:
                 ret = self.runner.run(name, args=self.args, stdout=out, cwd=self.input_dir)
                 if ret != 0:
                     self.error("doxyqml failed on {}".format(name))
@@ -105,10 +105,10 @@ class Test(object):
                 ok = False
                 continue
 
-            out_lines = open(out_path).readlines()
+            out_lines = open(out_path, encoding="utf-8").readlines()
 
             expected_path = os.path.join(self.expected_dir, name)
-            expected_lines = open(expected_path).readlines()
+            expected_lines = open(expected_path, encoding="utf-8").readlines()
 
             delta = difflib.unified_diff(expected_lines, out_lines, fromfile="expected", tofile="output")
             delta_lines = list(delta)
