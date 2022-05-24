@@ -55,6 +55,11 @@ string stringDefaultParameter(string arg = "hello");
  * @return the result
  */
 int propDefaultParameter(int arg = foo);
+/**
+ * Function that takes a pointer type parameter
+ * @param arg A pointer to an object derived from a QObject type
+ */
+void handleAnObject(QObject* arg);
 /// One-line comment
 void refresh();
 /// Function that takes an empty object as default value for a parameter

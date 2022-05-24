@@ -2,7 +2,7 @@ import logging
 import re
 import typing
 
-TYPE_RX = r"(?P<prefix>\s+type:)(?P<type>[\w.<>|]+)"
+TYPE_RX = r"(?P<prefix>\s+type:)(?P<type>[\w\*.<>|]+)"
 
 BASE_NAME_DICT = {
     "QtObject": "QtQml.QtObject",

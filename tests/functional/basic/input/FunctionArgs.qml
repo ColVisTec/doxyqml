@@ -72,6 +72,14 @@ Item {
         return arg;
     }
 
+    /**
+     * Function that takes a pointer type parameter
+     * @param type:QObject* arg A pointer to an object derived from a QObject type
+     */
+    function handleAnObject(arg) {
+      arg.aMethod()
+    }
+
     /// One-line comment
     function refresh() {
     }
