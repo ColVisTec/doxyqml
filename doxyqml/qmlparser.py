@@ -201,8 +201,12 @@ def parse_signal(reader):
 
 def parse_arguments(reader, typed=False):
     token = reader.consume_wo_comments()
+    spread = False
     if token.type == lexer.CHAR and token.value == ")":
         return []
+    elif token.type == lexer.ELLIPSES:
+        token =  reader.consume_expecting(lexer.ELEMENT)
+        spread = True
     elif token.type != lexer.ELEMENT:
         raise QmlParserUnexpectedTokenError(token)
 
@@ -213,6 +217,10 @@ def parse_arguments(reader, typed=False):
             token = reader.consume_expecting(lexer.ELEMENT)
             arg = QmlArgument(token.value)
             arg.type = arg_type
+        elif spread:
+            arg = QmlArgument(token.value)
+            arg.spread = True
+            spread = False
         else:
             arg = QmlArgument(token.value)
 
@@ -234,7 +242,11 @@ def parse_arguments(reader, typed=False):
         elif token.value != ",":
             raise QmlParserUnexpectedTokenError(token)
 
-        token = reader.consume_expecting(lexer.ELEMENT)
+        token = reader.consume_expecting([lexer.ELEMENT, lexer.ELLIPSES])
+
+        if token.type == lexer.ELLIPSES:
+            token = reader.consume_expecting(lexer.ELEMENT)
+            spread = True
 
 
 def skip_block(reader):

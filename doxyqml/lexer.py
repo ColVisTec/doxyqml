@@ -14,6 +14,7 @@ IMPORT = "import"
 PRAGMA = "pragma"
 COMPONENT = "component"
 ATTRIBUTE = "attribute"
+ELLIPSES = "ellipses"
 
 # not a doxy comment
 PLAIN_COMMENT_RX = re.compile("/[/*][^/!*]")
@@ -65,6 +66,7 @@ class Lexer(object):
             Tokenizer(PRAGMA, re.compile(r"pragma\s+\w.*")),
             Tokenizer(KEYWORD, re.compile(r"(default\s+property|property|readonly\s+property|signal|enum)\s+")),
             Tokenizer(KEYWORD, re.compile(r"(function)\s+[^(]")),  # a named function
+            Tokenizer(ELLIPSES, re.compile(r"\.\.\.")),
             Tokenizer(ELEMENT, re.compile(r"\w[\w.<>]*")),
             Tokenizer(CHAR, re.compile(".")),
             ]

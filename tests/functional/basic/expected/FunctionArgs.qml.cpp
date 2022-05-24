@@ -59,6 +59,10 @@ int propDefaultParameter(int arg = foo);
 void refresh();
 /// Function that takes an empty object as default value for a parameter
 void objectDefaultParam(arg = {});
+/// Function that has arguments and a spread argument
+void argumentsWithSpread(arg1, arg2 = {}, .../*args*/);
+/// Function that has only spread arguments
+void onlySpread(.../*args*/);
 
 Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)
 /* baz */

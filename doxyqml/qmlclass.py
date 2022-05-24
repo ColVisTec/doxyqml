@@ -215,9 +215,12 @@ class QmlArgument(object):
         self.type = ""
         self.name = name
         self.default_value = None
+        self.spread = False
 
     def __str__(self):
-        if self.type == "":
+        if self.spread:
+            return '.../*{}*/'.format(self.name)
+        elif self.type == "":
             return self.name + self.default_value_string()
         else:
             return self.type + " " + self.name + self.default_value_string()

@@ -81,6 +81,15 @@ Item {
         return arg
     }
 
+    /// Function that has arguments and a spread argument
+    function argumentsWithSpread(arg1, arg2 = {}, ...args) {
+      return arg1;
+    }
+
+    /// Function that has only spread arguments
+    function onlySpread(...args) {
+    }
+
     Item {
     }
 
