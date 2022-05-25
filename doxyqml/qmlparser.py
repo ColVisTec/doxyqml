@@ -14,7 +14,7 @@ class QmlParserUnexpectedTokenError(QmlParserError):
         QmlParserError.__init__(self, "Unexpected token: %s" % str(token), token)
 
 
-def parse_class_definition(reader, cls):
+def parse_class_definition(reader, cls, parse_sub_classes = True):
     token = reader.consume_wo_comments()
     if token.type != lexer.BLOCK_START:
         raise QmlParserError("Expected '{' after base class name", token)
@@ -28,7 +28,7 @@ def parse_class_definition(reader, cls):
         elif token.type == lexer.KEYWORD:
             parse_class_content(reader, cls, token, last_comment_token)
             last_comment_token = None
-        elif token.type == lexer.COMPONENT:
+        elif token.type == lexer.COMPONENT and parse_sub_classes:
             parse_class_component(reader, cls, token, last_comment_token)
             last_comment_token = None
         elif token.type == lexer.ATTRIBUTE:
@@ -324,8 +324,8 @@ class TokenReader(object):
         return self.idx == len(self.tokens)
 
 
-def parse(tokens, cls):
+def parse(tokens, cls, parse_sub_classes = True):
     reader = TokenReader(tokens)
     parse_header(reader, cls)
-    parse_class_definition(reader, cls)
+    parse_class_definition(reader, cls, parse_sub_classes)
     parse_footer(reader, cls)

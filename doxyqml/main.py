@@ -55,6 +55,10 @@ def parse_args(argv):
                         action="store_true",
                         default=False,
                         help="Don't append \"Since: [version]\" info to docstring")
+    parser.add_argument('--no-nested-components',
+                        action='store_true',
+                        default=False,
+                        help="Don't create private member documentation for nested components")
     parser.add_argument('--version',
                         action='version',
                         version='%%(prog)s %s' % __version__)
@@ -156,7 +160,7 @@ def main(argv=None, out=None):
     qml_class = QmlClass(classname, classversion)
 
     try:
-        qmlparser.parse(lexer.tokens, qml_class)
+        qmlparser.parse(lexer.tokens, qml_class, not args.no_nested_components)
     except qmlparser.QmlParserError as exc:
         logging.error("Failed to parse %s" % name)
         row, msg = info_for_error_at(text, exc.token.idx)
