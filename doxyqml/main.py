@@ -157,7 +157,7 @@ def main(argv=None, out=None):
     if args.no_since_version:
         classversion = None
 
-    qml_class = QmlClass(classname, classversion)
+    qml_class = QmlClass(classname, classversion, not args.no_nested_components)
 
     try:
         qmlparser.parse(lexer.tokens, qml_class, not args.no_nested_components)

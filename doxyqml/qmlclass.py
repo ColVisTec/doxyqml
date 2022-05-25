@@ -24,10 +24,11 @@ def is_cxx_comment(text):
 
 
 class QmlBaseComponent():
-    def __init__(self, name):
+    def __init__(self, name, should_separate_blocks = True):
         self.name = name
         self.base_name = ""
         self.elements = []
+        self.should_separate_blocks = should_separate_blocks
 
         lst = name.split(".")
         self.class_name = lst[-1]
@@ -78,7 +79,7 @@ class QmlBaseComponent():
                 lst.append("public:")
             else:
                 lst.append("private:")
-        elif last_was_cxx_comment and is_cxx_comment(element):
+        elif last_was_cxx_comment and is_cxx_comment(element) and self.should_separate_blocks:
             lst.append("")
         self._export_element(element, lst)
 
@@ -102,8 +103,8 @@ class QmlClass(QmlBaseComponent):
     SINGLETON_COMMENT = "/** @remark This component is a singleton */"
     VERSION_COMMENT = "/** @since %s */"
 
-    def __init__(self, name, version=None):
-        QmlBaseComponent.__init__(self, name)
+    def __init__(self, name, version=None, should_separate_blocks = True):
+        QmlBaseComponent.__init__(self, name, should_separate_blocks)
         self.header_comments = []
         self.footer_comments = []
         self.imports = []

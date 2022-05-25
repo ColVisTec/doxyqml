@@ -9,9 +9,9 @@ import QtQuick.Controls 1.4 as QtQuick1
  */
 Item {
 
-    /**
-     * A child with an ID.
-     */
+    /// @page page1 A page describing the content of the QML file
+    ///
+    /// Some Description Here
     Item {
 
         id: childItem
@@ -29,10 +29,8 @@ Item {
         }
     }
 
-    /**
-     * Another child with an ID. The childItem is not picked up, but the comment
-     * block is added on to the previous one.
-     */
+    /// Another block that gets added to the page which could describe why
+    /// childItem2 is here
     Item {
       id: childItem2
     }
