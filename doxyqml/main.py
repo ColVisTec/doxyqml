@@ -135,7 +135,12 @@ def main(argv=None, out=None):
 
     name = args.qml_file
     namespace = args.namespace
-    text = open(name, encoding="utf-8").read()
+
+    encoding = "utf-8"
+    first_4_bytes = open(name, 'rb').read(4)
+    if (first_4_bytes.startswith(codecs.BOM_UTF8)):
+        encoding = "utf-8-sig"
+    text = open(name, encoding=encoding).read()
 
     lexer = Lexer(text)
     try:
