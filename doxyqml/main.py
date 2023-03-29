@@ -122,7 +122,7 @@ def find_classname(qml_file, namespace=None):
     if namespace:
         classname = '.'.join(namespace) + '.' + classname
 
-    return classname, classversion
+    return classname, classversion, modulename
 
 
 def main(argv=None, out=None):
@@ -158,11 +158,14 @@ def main(argv=None, out=None):
         for token in lexer.tokens:
             print("%20s %s" % (token.type, token.value))
 
-    classname, classversion = find_classname(name, namespace)
+    classname, classversion, modulename = find_classname(name, namespace)
     if args.no_since_version:
         classversion = None
 
-    qml_class = QmlClass(classname, classversion, not args.no_nested_components)
+    if classname is None:
+        return
+
+    qml_class = QmlClass(classname, classversion, modulename, not args.no_nested_components)
 
     try:
         qmlparser.parse(lexer.tokens, qml_class, not args.no_nested_components)

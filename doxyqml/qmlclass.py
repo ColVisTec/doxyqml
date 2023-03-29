@@ -24,7 +24,7 @@ def is_cxx_comment(text):
 
 
 class QmlBaseComponent():
-    def __init__(self, name, should_separate_blocks = True):
+    def __init__(self, name, version = None, should_separate_blocks = True):
         self.name = name
         self.base_name = ""
         self.elements = []
@@ -33,6 +33,10 @@ class QmlBaseComponent():
         lst = name.split(".")
         self.class_name = lst[-1]
         self.namespaces = lst[:-1]
+
+        if version is not None:
+            self.namespaces += version.split('.')[0]
+            logging.error(self.namespaces)
 
     def get_attributes(self):
         return [x for x in self.elements if isinstance(x, QmlAttribute)]
@@ -102,13 +106,16 @@ class QmlBaseComponent():
 class QmlClass(QmlBaseComponent):
     SINGLETON_COMMENT = "/** @remark This component is a singleton */"
     VERSION_COMMENT = "/** @since %s */"
+    IMPORT_STATEMENT_COMMENT = "/** \\n <br><b>Import Statement</b> \\n @code import %s @endcode */"
 
-    def __init__(self, name, version=None, should_separate_blocks = True):
-        QmlBaseComponent.__init__(self, name, should_separate_blocks)
+    def __init__(self, name, version=None, modulename=None, should_separate_blocks = True):
+        QmlBaseComponent.__init__(self, name, version, should_separate_blocks)
         self.header_comments = []
         self.footer_comments = []
         self.imports = []
         self.alias = {}
+        if modulename:
+            self.header_comments.append(QmlClass.IMPORT_STATEMENT_COMMENT % modulename)
         if version:
             self.header_comments.append(QmlClass.VERSION_COMMENT % version)
 
@@ -129,7 +136,7 @@ class QmlClass(QmlBaseComponent):
         self.imports.append(module)
 
     def add_header_comment(self, obj):
-        self.header_comments.append(obj)
+        self.header_comments.insert(0, obj + "\n")
 
     def add_footer_comment(self, obj):
         self.footer_comments.append(obj)
