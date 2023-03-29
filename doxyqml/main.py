@@ -108,6 +108,10 @@ def find_classname(qml_file, namespace=None):
 
         rx_object_type = re.compile(r'^(\w+)\s+(\d+(?:\.\d+)*)\s+(\S+)\s*$', re.MULTILINE)
 
+        # skip internal classes
+        if "internal" in text:
+            return None, None, None
+
         for name, version, path in rx_object_type.findall(text):
             filename = os.path.join(basedir, path)
 
