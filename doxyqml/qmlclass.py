@@ -105,7 +105,7 @@ class QmlBaseComponent():
 
 class QmlClass(QmlBaseComponent):
     SINGLETON_COMMENT = "/** @remark This component is a singleton */"
-    VERSION_COMMENT = "/** @since %s */"
+    VERSION_COMMENT = "/** @version %s */"
     IMPORT_STATEMENT_COMMENT = "/** \\n <br><b>Import Statement</b> \\n @code import %s @endcode */"
 
     def __init__(self, name, version=None, modulename=None, should_separate_blocks = True):
