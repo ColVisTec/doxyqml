@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from doxyqml.lexer import Lexer, Token, IMPORT, PRAGMA, STRING, COMMENT, KEYWORD, ELEMENT, \
-        BLOCK_START, COMPONENT
+    BLOCK_START, BLOCK_END, COMPONENT, CHAR
 
 
 class LexerTestCase(TestCase):
@@ -51,3 +51,9 @@ class LexerTestCase(TestCase):
         self.assertEqual(lexer.tokens[2], Token(KEYWORD, 'property', 7, 7))
         self.assertEqual(lexer.tokens[3], Token(ELEMENT, 'var', 16, 16))
         self.assertEqual(lexer.tokens[4], Token(ELEMENT, 'property', 20, 20))
+
+    def test_curly_brackets_in_function(self):
+        src = "function foo(){ var bar = ' }' }"
+        lexer = Lexer(src)
+        lexer.tokenize()
+        self.assertEqual(lexer.tokens[9], Token(CHAR, '}', 28, 28))

@@ -60,8 +60,8 @@ class Lexer(object):
             # - an escaped char (\n, \t...)
             # then a double quote
             Tokenizer(STRING, re.compile(r'("([^\\"]|(\\.))*")')),
-            Tokenizer(BLOCK_START, re.compile("{")),
-            Tokenizer(BLOCK_END, re.compile("}")),
+            Tokenizer(BLOCK_START, re.compile("(?<!')\{(?!')")),
+            Tokenizer(BLOCK_END, re.compile("(?<!')\}(?!')")),
             Tokenizer(IMPORT, re.compile(r"import\s+.*")),
             Tokenizer(PRAGMA, re.compile(r"pragma\s+\w.*")),
             Tokenizer(KEYWORD, re.compile(r"(default\s+property|property|readonly\s+property|signal|enum)\s+")),
