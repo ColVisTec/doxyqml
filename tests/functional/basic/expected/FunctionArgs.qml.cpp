@@ -68,6 +68,8 @@ void objectDefaultParam(arg = {});
 void argumentsWithSpread(arg1, arg2 = {}, .../*args*/);
 /// Function that has only spread arguments
 void onlySpread(.../*args*/);
+/// Function that takes an empty array as default value for a parameter
+void arrayDefaultParam(arg = []);
 
 Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)
 /* baz */

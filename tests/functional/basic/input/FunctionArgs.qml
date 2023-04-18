@@ -98,6 +98,11 @@ Item {
     function onlySpread(...args) {
     }
 
+    /// Function that takes an empty array as default value for a parameter
+    function arrayDefaultParam(arg = []) {
+        return arg
+    }
+
     Item {
     }
 
