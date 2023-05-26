@@ -34,10 +34,6 @@ class QmlBaseComponent():
         self.class_name = lst[-1]
         self.namespaces = lst[:-1]
 
-        if version is not None:
-            self.namespaces += version.split('.')[0]
-            logging.error(self.namespaces)
-
     def get_attributes(self):
         return [x for x in self.elements if isinstance(x, QmlAttribute)]
 
@@ -114,10 +110,8 @@ class QmlClass(QmlBaseComponent):
         self.footer_comments = []
         self.imports = []
         self.alias = {}
-        if modulename:
-            self.header_comments.append(QmlClass.IMPORT_STATEMENT_COMMENT % modulename)
-        if version:
-            self.header_comments.append(QmlClass.VERSION_COMMENT % version)
+        self.modulename = modulename
+        self.version = version
 
     def add_pragma(self, decl):
         args = decl.split(' ', 2)[1].strip()
@@ -136,7 +130,7 @@ class QmlClass(QmlBaseComponent):
         self.imports.append(module)
 
     def add_header_comment(self, obj):
-        self.header_comments.insert(0, obj + "\n")
+        self.header_comments.append(obj)
 
     def add_footer_comment(self, obj):
         self.footer_comments.append(obj)
@@ -148,6 +142,12 @@ class QmlClass(QmlBaseComponent):
             lst.append("namespace %s {" % '::'.join(self.namespaces))
 
         lst.extend([str(x) for x in self.header_comments])
+
+        if self.modulename:
+            lst.append(QmlClass.IMPORT_STATEMENT_COMMENT % self.modulename)
+        if self.version:
+            lst.append(QmlClass.VERSION_COMMENT % self.version)
+
 
     def _export_footer(self, lst):
         lst.extend([str(x) for x in self.footer_comments])
