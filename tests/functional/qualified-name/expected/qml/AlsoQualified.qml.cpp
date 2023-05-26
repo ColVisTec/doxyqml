@@ -1,5 +1,6 @@
 namespace test::doxyqml {
-/** @since 2.0 */
+/** \n <br><b>Import Statement</b> \n @code import test.doxyqml @endcode */
+/** @version 2.0 */
 class AlsoQualified : public QtQuick.Item {
 public:
 

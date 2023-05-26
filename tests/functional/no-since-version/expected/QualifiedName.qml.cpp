@@ -1,4 +1,5 @@
 namespace test::doxyqml {
+/** \n <br><b>Import Statement</b> \n @code import test.doxyqml @endcode */
 class QualifiedName : public QtQuick.Item {
 public:
 
