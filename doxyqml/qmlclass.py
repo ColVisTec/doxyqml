@@ -102,7 +102,7 @@ class QmlBaseComponent():
 class QmlClass(QmlBaseComponent):
     SINGLETON_COMMENT = "/** @remark This component is a singleton */"
     VERSION_COMMENT = "/** @version %s */"
-    IMPORT_STATEMENT_COMMENT = "/** \\n <br><b>Import Statement</b> \\n @code import %s @endcode */"
+    IMPORT_STATEMENT_COMMENT = "/** {} <br><b>Import Statement</b> \\n @code import {} @endcode */"
 
     def __init__(self, name, version=None, modulename=None, should_separate_blocks = True):
         QmlBaseComponent.__init__(self, name, version, should_separate_blocks)
@@ -144,7 +144,20 @@ class QmlClass(QmlBaseComponent):
         lst.extend([str(x) for x in self.header_comments])
 
         if self.modulename:
-            lst.append(QmlClass.IMPORT_STATEMENT_COMMENT % self.modulename)
+            # we want to insert a newline if there has been any comments (usually a description of the class)
+            newline = ""
+
+            # is there any comments before this one?
+            any_comments = len(self.header_comments) > 0
+
+            # and if there is any comments, is the last one a SPDX message? they don't render, so don't insert a
+            # useless newline
+            is_spdx_last = any_comments and ("SPDX" not in self.header_comments[len(self.header_comments) - 1])
+
+            if any_comments and is_spdx_last:
+                newline = "\\n"
+
+            lst.append(QmlClass.IMPORT_STATEMENT_COMMENT.format(newline, self.modulename))
         if self.version:
             lst.append(QmlClass.VERSION_COMMENT % self.version)
 
