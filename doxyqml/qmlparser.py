@@ -227,19 +227,23 @@ def parse_arguments(reader, typed=False):
         token = reader.consume_expecting(lexer.CHAR)
 
         if token.value == "=":
-            token = reader.consume_expecting(
-                [lexer.ELEMENT, lexer.STRING, lexer.BLOCK_START, lexer.ARRAY_START]
-            )
-            if token.value == "{":
-                token = reader.consume_expecting(lexer.BLOCK_END)
-                arg.default_value = "{}"
-            elif token.value == "[":
-                token = reader.consume_expecting(lexer.ARRAY_END)
-                arg.default_value = "[]"
-            else:
-                arg.default_value = token.value
-            token = reader.consume_expecting(lexer.CHAR)
-
+            default_value = ""
+            while True:
+                token = reader.consume_expecting(
+                    [lexer.ELEMENT, lexer.CHAR, lexer.STRING, lexer.BLOCK_START, lexer.ARRAY_START]
+                )
+                if token.value in (")", ","):
+                    break
+                if token.value == "{":
+                    token = reader.consume_expecting(lexer.BLOCK_END)
+                    default_value += "{}"
+                elif token.value == "[":
+                    token = reader.consume_expecting(lexer.ARRAY_END)
+                    default_value += "[]"
+                else:
+                    default_value += token.value
+                # token = reader.consume_expecting(lexer.CHAR)
+            arg.default_value = default_value
         args.append(arg)
 
         if token.value == ")":

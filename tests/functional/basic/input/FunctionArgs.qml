@@ -103,6 +103,9 @@ Item {
         return arg
     }
 
+    /// Default values can now be expressions
+    function complicatedDefaultValue(area = 10.0 * 20.0) {}
+
     Item {
     }
 

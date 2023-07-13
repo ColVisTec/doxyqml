@@ -70,6 +70,8 @@ void argumentsWithSpread(arg1, arg2 = {}, .../*args*/);
 void onlySpread(.../*args*/);
 /// Function that takes an empty array as default value for a parameter
 void arrayDefaultParam(arg = []);
+/// Default values can now be expressions
+void complicatedDefaultValue(area = 10.0*20.0);
 
 Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)
 /* baz */

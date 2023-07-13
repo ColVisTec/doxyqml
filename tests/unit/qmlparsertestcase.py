@@ -171,3 +171,16 @@ class QmlParserTestCase(TestCase):
         self.assertEqual(signal.args[0].type, "string")
         self.assertEqual(signal.args[1].name, "age")
         self.assertEqual(signal.args[1].type, "int")
+
+    def test_functions(self):
+        src = """Item {
+                    function scale(aspect = 4.0 / 3.0) {}
+                 }"""
+        lexer = Lexer(src)
+        lexer.tokenize()
+        qmlclass = QmlClass("Foo")
+        qmlparser.parse(lexer.tokens, qmlclass)
+        functions = qmlclass.get_functions()
+        self.assertEqual(len(functions), 1)
+        self.assertEqual(functions[0].args[0].name, "aspect")
+        self.assertEqual(functions[0].args[0].default_value, "4.0/3.0")
