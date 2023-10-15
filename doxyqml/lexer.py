@@ -57,11 +57,11 @@ class Lexer(object):
             Tokenizer(ICOMMENT, re.compile(r"//[/!]<[^\n]*(?:\n[ \t]*//[/!]<[^\n]*)*")),
             Tokenizer(COMMENT, re.compile(r"/\*.*?\*/", re.DOTALL)),
             Tokenizer(COMMENT, re.compile(r"//[^\n]*(?:\n[ \t]*//[^\n]*)*")),
-            # A double quote, then either:
+            # A double or single quote, then either:
             # - anything but a double quote or a backslash
             # - an escaped char (\n, \t...)
-            # then a double quote
-            Tokenizer(STRING, re.compile(r'("([^\\"]|(\\.))*")')),
+            # then a double or single quote
+            Tokenizer(STRING, re.compile(r'("([^\\"]|(\\.))*"|\'([^\\\']|(\\.))*\')')),
             Tokenizer(BLOCK_START, re.compile("(?<!')\{(?!')")),
             Tokenizer(BLOCK_END, re.compile("(?<!')\}(?!')")),
             Tokenizer(ARRAY_START, re.compile("\[")),
