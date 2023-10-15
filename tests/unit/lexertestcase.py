@@ -56,4 +56,4 @@ class LexerTestCase(TestCase):
         src = "function foo(){ var bar = ' }' }"
         lexer = Lexer(src)
         lexer.tokenize()
-        self.assertEqual(lexer.tokens[9], Token(CHAR, '}', 28, 28))
+        self.assertEqual(lexer.tokens[9], Token(BLOCK_END, '}', 31, 31))
