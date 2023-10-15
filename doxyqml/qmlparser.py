@@ -11,7 +11,7 @@ class QmlParserError(Exception):
 
 class QmlParserUnexpectedTokenError(QmlParserError):
     def __init__(self, token):
-        QmlParserError.__init__(self, "Unexpected token: %s" % str(token), token)
+        QmlParserError.__init__(self, "Unexpected token: {}".format(str(token)), token)
 
 
 def parse_class_definition(reader, cls, parse_sub_classes = True):
@@ -246,12 +246,18 @@ def parse_arguments(reader, typed=False):
             arg.default_value = default_value
         args.append(arg)
 
+        if token.value == ":":
+            token = reader.consume_expecting(lexer.ELEMENT)
+            arg.type = token.value
+            token = reader.consume_expecting(lexer.CHAR)
+
         if token.value == ")":
             return args
         elif token.value != ",":
             raise QmlParserUnexpectedTokenError(token)
 
         token = reader.consume_expecting([lexer.ELEMENT, lexer.ELLIPSES])
+
 
         if token.type == lexer.ELLIPSES:
             token = reader.consume_expecting(lexer.ELEMENT)

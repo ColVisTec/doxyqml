@@ -72,6 +72,8 @@ void onlySpread(.../*args*/);
 void arrayDefaultParam(arg = []);
 /// Default values can now be expressions
 void complicatedDefaultValue(area = 10.0*20.0);
+/// Function with arguments
+void typedFunction(int a, var arg, Item item);
 
 Q_PROPERTY(int weirdProperty READ dummyGetter_weirdProperty_ignore)
 /* baz */
