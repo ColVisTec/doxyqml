@@ -106,6 +106,12 @@ Item {
     /// Default values can now be expressions
     function complicatedDefaultValue(area = 10.0 * 20.0) {}
 
+    /// Function with arguments
+    function typedFunction(a: int, arg: var, item: Item) {}
+
+    /// Private function
+    function __privateFunction() {}
+
     Item {
     }
 
