@@ -1,3 +1,20 @@
+# 2023.10.14 - 0.5.3
+
+- Add support for single quote (Carl Schwan)
+- Add a bit of typing annotation (Carl Schwan)
+- Ignore private functions in generate api (Carl Schwan)
+- Add support for typped functions (Carl Schwan)
+- qmlclass.py::add_import: dynamically get import qualifier (Matej Starc)
+- Allow arbitrary default arguments (Frederik Gladhorn)
+- Fix wasteful newline if there was no meaningful comment (Joshua Goins)
+- Change expected test data to account for the new comments (Joshua Goins)
+- Simplify header comments, add version/import at the very last minute (Joshua Goins)
+- Don't parse internal module types (Joshua Goins)
+- Use @version instead of @since command (Joshua Goins)
+- Add import statements for QML components (Joshua Goins)
+- Support array literals as function args (Nikolai R Kristiansen)
+- Fixed parsing curly brackets in JS function (Libor Tomsik)
+
 # 2018.12.01 - 0.5.0
 
 - Turn internal QML elements into private C++ members, see README.md for details on how to use this. (Matthew Lam)
