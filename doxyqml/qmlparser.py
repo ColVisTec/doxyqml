@@ -72,14 +72,14 @@ def parse_class_component(reader, cls, token, doc_token):
     cls.add_element(obj)
 
 
-def parse_class_attribute(reader, cls, token, doc_token):
+def parse_class_attribute(reader, cls, token, doc_token) -> QmlAttribute:
     obj = QmlAttribute()
     obj.name = token.value
 
     # Should be colon
     token = reader.consume_expecting(lexer.CHAR)
     token = reader.consume()
-    if token.type == lexer.BLOCK_START:
+    if token.type == lexer.BLOCK_START or token.type == lexer.ARRAY_START:
         skip_block(reader)
     else:
         obj.value = token.value
@@ -90,7 +90,7 @@ def parse_class_attribute(reader, cls, token, doc_token):
     cls.add_element(obj)
 
 
-def parse_property(reader, property_token_value):
+def parse_property(reader, property_token_value) -> QmlProperty:
     prop = QmlProperty()
     prop.is_default = property_token_value.startswith("default")
     prop.is_readonly = property_token_value.startswith("readonly")
@@ -103,7 +103,7 @@ def parse_property(reader, property_token_value):
     return prop
 
 
-def parse_function(reader):
+def parse_function(reader) -> QmlFunction:
     obj = QmlFunction()
     token = reader.consume_expecting(lexer.ELEMENT)
     obj.name = token.value
@@ -113,7 +113,7 @@ def parse_function(reader):
     return obj
 
 
-def parse_enum(reader):
+def parse_enum(reader) -> QmlEnum:
     obj = QmlEnum()
     token = reader.consume_expecting(lexer.ELEMENT)
     obj.name = token.value
