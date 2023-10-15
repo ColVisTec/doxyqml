@@ -57,6 +57,8 @@ def parse_class_content(reader, cls, token, doc_token):
     if doc_token is not None:
         obj.doc = doc_token.value
         obj.doc_is_inline = (doc_token.type == lexer.ICOMMENT)
+    if obj.name.startswith('_'):
+        return
     cls.add_element(obj)
 
 
