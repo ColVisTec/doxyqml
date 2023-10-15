@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/agateau/doxyqml.svg?branch=master)](https://travis-ci.org/agateau/doxyqml)
-[![Coverage Status](https://coveralls.io/repos/github/agateau/doxyqml/badge.svg?branch=master)](https://coveralls.io/github/agateau/doxyqml?branch=master)
+![coverage](https://invent.kde.org/sdk/doxyqml/badges/master/coverage.svg?job=test)
 
 # Goals
 
