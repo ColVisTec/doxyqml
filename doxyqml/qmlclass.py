@@ -125,8 +125,8 @@ class QmlClass(QmlBaseComponent):
         if module[0] == '"':
             # Ignore directory or javascript imports for now
             return
-        if len(modules) > 3:
-            self.alias[modules[4]] = modules[1]
+        if "as" in modules:
+            self.alias[modules[modules.index("as")+1]] = modules[1]
         self.imports.append(module)
 
     def add_header_comment(self, obj):
