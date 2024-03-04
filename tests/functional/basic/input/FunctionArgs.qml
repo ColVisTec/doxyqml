@@ -36,6 +36,7 @@ Item {
 
     property string escaped: "a string \n \" \t with escaped chars"
     property string block: "a string with some block {({ ] } chars"
+    property string templateString: `backticks and reference to other property: {escaped}`
 
     /**
      * Compute the arg^2

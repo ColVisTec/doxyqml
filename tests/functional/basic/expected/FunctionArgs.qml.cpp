@@ -32,6 +32,8 @@ void badlyDocumented(string foo, bar);
 Q_PROPERTY(string escaped READ dummyGetter_escaped_ignore)
 
 Q_PROPERTY(string block READ dummyGetter_block_ignore)
+
+Q_PROPERTY(string templateString READ dummyGetter_templateString_ignore)
 /**
  * Compute the arg^2
  * @return the result
