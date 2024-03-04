@@ -28,6 +28,15 @@ class LexerTestCase(TestCase):
         self.assertEqual(lexer.tokens[2], Token(STRING, r'"new\nline"', 17, 17))
         self.assertEqual(lexer.tokens[3], Token(STRING, r'"qu\"ote"', 29, 29))
 
+    def test_single_quote_string(self):
+        src = r"'hello' 'world!' 'new\nline' 'qu\"ote'"
+        lexer = Lexer(src)
+        lexer.tokenize()
+        self.assertEqual(lexer.tokens[0], Token(STRING, "'hello'", 0, 0))
+        self.assertEqual(lexer.tokens[1], Token(STRING, "'world!'", 8, 8))
+        self.assertEqual(lexer.tokens[2], Token(STRING, r"'new\nline'", 17, 17))
+        self.assertEqual(lexer.tokens[3], Token(STRING, r"'qu\"ote'", 29, 29))
+
     def test_backtick_string(self):
         src = r'`hello` `a {variable} here` `new\nline` `qu\"ote`'
         lexer = Lexer(src)
