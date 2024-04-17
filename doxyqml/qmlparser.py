@@ -79,7 +79,7 @@ def parse_class_attribute(reader, cls, token, doc_token) -> QmlAttribute:
     # Should be colon
     token = reader.consume_expecting(lexer.CHAR)
     token = reader.consume()
-    if token.type == lexer.BLOCK_START or token.type == lexer.ARRAY_START:
+    if token.type == lexer.BLOCK_START:
         skip_block(reader)
     else:
         obj.value = token.value
