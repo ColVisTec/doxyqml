@@ -106,11 +106,14 @@ def find_classname(qml_file, namespace=None):
 
         basedir = os.path.dirname(qmldir)
 
+        rx_internal_type = re.compile(r'^internal\s+(\w+)\s+(\S+)\s*$', re.MULTILINE)
         rx_object_type = re.compile(r'^(\w+)\s+(\d+(?:\.\d+)*)\s+(\S+)\s*$', re.MULTILINE)
 
         # skip internal classes
-        if "internal" in text:
-            return None, None, None
+        for name, path in rx_internal_type.findall(text):
+            filename = os.path.join(basedir, path)
+            if os.path.isfile(filename) and os.path.samefile(qml_file, filename):
+                return None, None, None
 
         for name, version, path in rx_object_type.findall(text):
             filename = os.path.join(basedir, path)
@@ -167,7 +170,7 @@ def main(argv=None, out=None):
         classversion = None
 
     if classname is None:
-        return
+        return 0
 
     qml_class = QmlClass(classname, classversion, modulename, not args.no_nested_components)
 

@@ -1,0 +1,3 @@
+module demo
+PublicWithout_internals 1.0 PublicWithout_internals.qml
+PublicClass 1.0 PublicClass.qml
