@@ -15,6 +15,7 @@ KEYWORD = "keyword"
 IMPORT = "import"
 PRAGMA = "pragma"
 COMPONENT = "component"
+ICOMPONENT = "inline_component"
 ATTRIBUTE = "attribute"
 ELLIPSES = "ellipses"
 
@@ -48,6 +49,7 @@ class Lexer(object):
     def __init__(self, text):
         # Tokens that start at the first non-whitespace character in a line
         self.tokenizers_newline = [
+            Tokenizer(ICOMPONENT, re.compile(r"component ([-\w\.]+)\s*")),  # an inline component
             Tokenizer(COMPONENT, re.compile(r"([-\w\.]+)\s*{")),  # a component
             Tokenizer(ATTRIBUTE, re.compile(r"([-\w\.]+)\s*:")),  # an attribute
             ]

@@ -1,6 +1,6 @@
 import doxyqml.lexer as lexer
 
-from doxyqml.qmlclass import QmlComponent, QmlArgument, QmlEnum, QmlEnumerator, QmlProperty, QmlFunction, QmlSignal, QmlAttribute
+from doxyqml.qmlclass import QmlClass, QmlComponent, QmlArgument, QmlEnum, QmlEnumerator, QmlProperty, QmlFunction, QmlSignal, QmlAttribute
 
 
 class QmlParserError(Exception):
@@ -36,6 +36,9 @@ def parse_class_definition(reader, cls, parse_sub_classes = True):
             last_comment_token = None
         elif token.type == lexer.BLOCK_START:
             skip_block(reader)
+        elif token.type == lexer.ICOMPONENT:
+            parse_inline_component(reader, cls, token, last_comment_token)
+            last_comment_token = None
         elif token.type == lexer.BLOCK_END:
             break
     if last_comment_token:
@@ -277,6 +280,15 @@ def skip_block(reader):
             if count == 0:
                 return
 
+def parse_inline_component(reader, cls, token, doc_token):
+    reader.consume_expecting(lexer.CHAR)
+    icls = QmlClass(token.value)
+    if doc_token:
+        icls.add_header_comment(doc_token.value)
+    name = reader.consume_expecting(lexer.ELEMENT)
+    icls.base_name = name.value
+    parse_class_definition(reader, icls, True)
+    cls.add_element(icls)
 
 def parse_header(reader, cls):
     while not reader.at_end():
